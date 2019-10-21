@@ -82,7 +82,6 @@ void RestaurantOrganizer::heapDown(int index){
 }
 
 void RestaurantOrganizer::printSorted(ofstream& outFile){
-    //outFile<<heap[0]<<" "<<heap[1]<<" "<<heap[2]<<endl;
     for(int i=0; i<numberOfTables; i++) {
         outFile<<tableCapacity[heap[0]]<<" ";
         tableCapacity[heap[0]]=-1;
