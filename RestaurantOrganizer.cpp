@@ -32,8 +32,14 @@ void RestaurantOrganizer::addNewGroup(int groupSize, ofstream& outFile){
 
 void RestaurantOrganizer::heapUp(int index){
     int temp=move(heap[index]);
-    for( ; index>0 && tableCapacity[temp] > tableCapacity[ heap[(index-1) / 2] ] ; index =(index-1)/ 2 ) {
-        heap[index]=move(heap[(index-1)/2]);
+    for( ; index>0 && tableCapacity[temp] >= tableCapacity[ heap[(index-1) / 2] ] ; index =(index-1)/ 2 ) {
+        if(tableCapacity[temp]==tableCapacity[heap[(index-1)/2]]) {
+            if(temp<heap[(index-1)/2]) {
+                heap[index]=move(heap[(index-1)/2]);
+            } else
+                break;
+        } else
+            heap[index]=move(heap[(index-1)/2]);
 
         if(index==0)
             break;
@@ -49,23 +55,23 @@ void RestaurantOrganizer::heapDown(int index){
     int child;
     while((index+1) * 2-1 < numberOfTables) {
         child=(index+1) * 2-1;
-        if(child<numberOfTables-1 && tableCapacity[heap[child+1]]>tableCapacity[heap[child]]) {
+        if(child!=numberOfTables-1 && tableCapacity[heap[child+1]]>tableCapacity[heap[child]]) {
             child++;
         }
-        if(child<numberOfTables-1 && tableCapacity[heap[child+1]]==tableCapacity[heap[child]]) {
+        else if(child!=numberOfTables-1 && tableCapacity[heap[child+1]]==tableCapacity[heap[child]]) {
             if(heap[child+1]<heap[child])
                 child++;
         }
-        if(tableCapacity[heap[child]]>=tableCapacity[temp]){
-            if(tableCapacity[heap[child]]>tableCapacity[temp])
+        if(tableCapacity[heap[child]]>tableCapacity[temp]){
                 heap[index]=move(heap[child]);
-            else {
-                if(heap[child]<temp) {
-                    heap[index]=move(heap[child]);
-                } else
-                    break;
-            }
-        } else  {
+
+        } else if(tableCapacity[heap[child]]==tableCapacity[temp]) {
+            if(heap[child]<temp) {
+                heap[index]=move(heap[child]);
+            } else
+                break;
+        }
+        else  {
             break;
         }
         index=child;
